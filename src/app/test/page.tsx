@@ -1,6 +1,6 @@
 'use client';
-import { useEffect } from 'react';
 
+import { useEffect } from 'react';
 export default function Test() {
   useEffect(() => {
     async function fetchData(url: string) {
@@ -13,5 +13,9 @@ export default function Test() {
     fetchData('/api/legislators');
   }, []);
 
-  return <div>page</div>;
+  return (
+    <>
+      <div>page</div>
+    </>
+  );
 }
