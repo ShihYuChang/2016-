@@ -1,5 +1,6 @@
 'use client';
 import Header from '@/components/Header';
+import ContextProvider from '@/context/context';
 import StyledComponentsRegistry from '@/lib/registry';
 import styled from 'styled-components';
 import './globals.css';
@@ -30,11 +31,13 @@ export default function RootLayout({
     <html>
       <body>
         <StyledComponentsRegistry>
-          <Header />
-          <Content>
-            <PageTitle>Page Title</PageTitle>
-            {children}
-          </Content>
+          <ContextProvider>
+            <Header />
+            <Content>
+              <PageTitle>Page Title</PageTitle>
+              {children}
+            </Content>
+          </ContextProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
