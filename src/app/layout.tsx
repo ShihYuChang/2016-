@@ -1,7 +1,8 @@
 'use client';
 import Header from '@/components/Header';
-import ContextProvider from '@/context/context';
+import ContextProvider, { Context } from '@/context/context';
 import StyledComponentsRegistry from '@/lib/registry';
+import { useContext } from 'react';
 import styled from 'styled-components';
 import './globals.css';
 
@@ -27,6 +28,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { page } = useContext(Context);
   return (
     <html>
       <body>
@@ -34,7 +36,7 @@ export default function RootLayout({
           <ContextProvider>
             <Header />
             <Content>
-              <PageTitle>Page Title</PageTitle>
+              <PageTitle>{page?.text}</PageTitle>
               {children}
             </Content>
           </ContextProvider>
