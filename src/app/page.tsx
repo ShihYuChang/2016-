@@ -1,11 +1,9 @@
 'use client';
-
 import BarChart, { Category } from '@/components/Charts/BarChart';
 import CandidateSelector from '@/components/Selectors/CandidateSelector';
 import CategorySelector from '@/components/Selectors/CategorySelector';
 import { Candidate, Context } from '@/context/context';
-import { fetchData } from '@/utils/api';
-import { parseStrNumber } from '@/utils/parseNumber';
+import useCandidates from '@/hooks/useCandidates';
 import { useContext, useEffect, useState } from 'react';
 
 export const twoCandidatesOptions: Category[] = [
@@ -16,8 +14,7 @@ export const twoCandidatesOptions: Category[] = [
 ];
 
 export default function Home() {
-  const { candidates, setPage, setCandidates, initialCandidates } =
-    useContext(Context);
+  const { setPage } = useContext(Context);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     twoCandidatesOptions[0]
   );
@@ -28,18 +25,9 @@ export default function Home() {
 
   useEffect(() => {
     setPage({ text: '資訊對比分析', path: '/' });
-
-    async function getCandidates() {
-      const candidatesRawData = await fetchData('/api/legislators');
-      const finalCandidatesData = candidatesRawData.data.map((obj) =>
-        parseStrNumber(obj)
-      );
-      setCandidates(finalCandidatesData);
-      initialCandidates.current = finalCandidatesData;
-    }
-
-    getCandidates();
   }, []);
+
+  useCandidates();
 
   return (
     <>

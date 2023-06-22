@@ -1,6 +1,5 @@
 'use client';
-import { fetchData } from '@/utils/api';
-import { parseStrNumber } from '@/utils/parseNumber';
+import useCandidates from '@/hooks/useCandidates';
 import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import BarChart, { Category } from '../../components/Charts/BarChart';
@@ -23,8 +22,7 @@ const options: Category[] = [
 ];
 
 export default function MultiCandidates() {
-  const { candidates, setPage, setCandidates, initialCandidates } =
-    useContext(Context);
+  const { candidates, setPage } = useContext(Context);
   const [fiveCandidates, setFiveCandidates] = useState<Candidate[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     options[0]
@@ -32,18 +30,9 @@ export default function MultiCandidates() {
 
   useEffect(() => {
     setPage({ text: '資金來源分析', path: '/multi-candidates' });
-
-    async function getCandidates() {
-      const candidatesRawData = await fetchData('/api/legislators');
-      const finalCandidatesData = candidatesRawData.data.map((obj) =>
-        parseStrNumber(obj)
-      );
-      setCandidates(finalCandidatesData);
-      initialCandidates.current = finalCandidatesData;
-    }
-
-    getCandidates();
   }, []);
+
+  useCandidates();
 
   useEffect(() => {
     if (candidates.length > 0) {
