@@ -194,7 +194,7 @@ export default function CandidateSelector({
             onClick={() => handleSelectorClick(parentIndex)}
             $clicked={parentIndex === clickedSelector}
           >
-            {candidate.姓名}
+            {candidate?.姓名}
             <ArrowWrapper>
               <BsChevronDown />
             </ArrowWrapper>
