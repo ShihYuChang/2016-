@@ -31,6 +31,7 @@ export default function RootLayout({
   const { page } = useContext(Context);
   return (
     <html>
+      <title>2016 政治獻金資訊平台</title>
       <body>
         <StyledComponentsRegistry>
           <ContextProvider>
