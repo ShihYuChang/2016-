@@ -6,7 +6,7 @@ import { Candidate, Context } from '@/context/context';
 import useCandidates from '@/hooks/useCandidates';
 import { useContext, useEffect, useState } from 'react';
 
-export const twoCandidatesOptions: Category[] = [
+const twoCandidatesOptions: Category[] = [
   { name: '總收入', labelFormat: 'currency' },
   { name: '捐贈企業數', labelFormat: 'number' },
   { name: '得票數', labelFormat: 'number' },
