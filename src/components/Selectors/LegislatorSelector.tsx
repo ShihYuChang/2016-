@@ -1,11 +1,11 @@
-import { SetStateAction, useContext, useEffect, useRef, useState } from 'react';
+import { SetStateAction, useContext, useEffect, useState } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
 import styled from 'styled-components';
-import { Candidate, Context } from '../../context/context';
+import { Context, Legislator } from '../../context/context';
 
-interface CandidateSelectorProps {
-  selectedCandidates: Candidate[];
-  setSelectedCandidates: React.Dispatch<SetStateAction<Candidate[]>>;
+interface LegislatorSelectorProps {
+  selectedLegislators: Legislator[];
+  setSelectedLegislators: React.Dispatch<SetStateAction<Legislator[]>>;
 }
 
 interface OptionWrapperProps {
@@ -117,17 +117,17 @@ const SearchBar = styled.input`
   outline: none;
 `;
 
-export default function CandidateSelector({
-  selectedCandidates,
-  setSelectedCandidates,
-}: CandidateSelectorProps) {
-  const { candidates, setCandidates, initialCandidates } = useContext(Context);
+export default function LegislatorSelector({
+  selectedLegislators,
+  setSelectedLegislators,
+}: LegislatorSelectorProps) {
+  const { legislators, setLegislators, initialLegislators } =
+    useContext(Context);
   const [clickedSelector, setClickedSelector] = useState<number | null>(null);
   const [input, setInput] = useState<string[]>(['', '']);
-  const initialCandidatesSet = useRef<boolean>(false);
 
   function handleSelectorClick(index: number) {
-    setCandidates(initialCandidates.current);
+    setLegislators(initialLegislators.current);
     if (clickedSelector !== index) {
       setClickedSelector(index);
       return;
@@ -135,34 +135,34 @@ export default function CandidateSelector({
     setClickedSelector(null);
   }
 
-  function handleCandidateSelect(candidateName: string, index: number) {
-    const output = [...selectedCandidates];
-    const candidate = candidates.find(
-      (candidate) => candidate.姓名 === candidateName
+  function handleLegislatorSelect(legislatorName: string, index: number) {
+    const output = [...selectedLegislators];
+    const legislator = legislators.find(
+      (legislator) => legislator.姓名 === legislatorName
     );
-    if (candidate) {
-      output[index] = candidate;
-      setSelectedCandidates(output);
+    if (legislator) {
+      output[index] = legislator;
+      setSelectedLegislators(output);
       setClickedSelector(null);
       setInput(['', '']);
     }
+  }
+
+  function filterLegislator(input: string) {
+    const newLegislators = initialLegislators.current.filter((legislator) =>
+      legislator.姓名.includes(input)
+    );
+    newLegislators && setLegislators(newLegislators);
   }
 
   function handleSearchInput(
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
   ) {
-    filterCandidate(e.target.value);
+    filterLegislator(e.target.value);
     const newInput = [...input];
     newInput[index] = e.target.value;
     setInput(newInput);
-  }
-
-  function filterCandidate(input: string) {
-    const newCandidates = initialCandidates.current.filter((candidate) =>
-      candidate.姓名.includes(input)
-    );
-    newCandidates && setCandidates(newCandidates);
   }
 
   useEffect(() => {
@@ -177,24 +177,16 @@ export default function CandidateSelector({
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
-  useEffect(() => {
-    if (candidates.length > 0 && !initialCandidatesSet.current) {
-      setSelectedCandidates([candidates[0], candidates[1]]);
-      initialCandidates.current = candidates;
-      initialCandidatesSet.current = true;
-    }
-  }, [candidates]);
-
   return (
     <Wrapper>
-      {selectedCandidates.map((candidate, parentIndex) => (
+      {selectedLegislators.map((legislator, parentIndex) => (
         <SelectorWrapper key={parentIndex}>
           <SelectorLabel>政治人物 {parentIndex + 1}</SelectorLabel>
           <Selector
             onClick={() => handleSelectorClick(parentIndex)}
             $clicked={parentIndex === clickedSelector}
           >
-            {candidate?.姓名}
+            {legislator?.姓名}
             <ArrowWrapper>
               <BsChevronDown />
             </ArrowWrapper>
@@ -211,16 +203,16 @@ export default function CandidateSelector({
                 placeholder='搜尋候選人...'
               />
             </SearchBarWrapper>
-            {candidates.length > 0 ? (
-              candidates.map((candidate, index) => (
+            {legislators.length > 0 ? (
+              legislators.map((legislator, index) => (
                 <Option
                   key={index}
-                  disabled={selectedCandidates.indexOf(candidate) !== -1}
+                  disabled={selectedLegislators.indexOf(legislator) !== -1}
                   onClick={() =>
-                    handleCandidateSelect(candidate.姓名, parentIndex)
+                    handleLegislatorSelect(legislator.姓名, parentIndex)
                   }
                 >
-                  {candidate.姓名}
+                  {legislator.姓名}
                 </Option>
               ))
             ) : (

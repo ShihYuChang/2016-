@@ -1,12 +1,13 @@
 'use client';
 import BarChart, { Category } from '@/components/Charts/BarChart';
-import CandidateSelector from '@/components/Selectors/CandidateSelector';
 import CategorySelector from '@/components/Selectors/CategorySelector';
-import { Candidate, Context } from '@/context/context';
-import useCandidates from '@/hooks/useCandidates';
-import { useContext, useEffect, useState } from 'react';
+import LegislatorSelector from '@/components/Selectors/LegislatorSelector';
+import { Context, Legislator } from '@/context/context';
+import useLegislatorsApi from '@/hooks/useLegislatorsApi';
+import { useContext, useEffect, useRef, useState } from 'react';
+import ReactLoading from 'react-loading';
 
-const twoCandidatesOptions: Category[] = [
+const options: Category[] = [
   { name: '總收入', labelFormat: 'currency' },
   { name: '捐贈企業數', labelFormat: 'number' },
   { name: '得票數', labelFormat: 'number' },
@@ -14,34 +15,45 @@ const twoCandidatesOptions: Category[] = [
 ];
 
 export default function Home() {
-  const { setPage } = useContext(Context);
+  const { setPage, legislators, initialLegislators } = useContext(Context);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
-    twoCandidatesOptions[0]
+    options[0]
   );
-  const [selectedCandidates, setSelectedCandidates] = useState<Candidate[]>([
+  const [selectedLegislators, setSelectedLegislators] = useState<Legislator[]>([
     { 姓名: '', 總收入: 0 },
     { 姓名: '', 總收入: 0 },
   ]);
+  const initialLegislatorsSet = useRef<boolean>(false);
 
   useEffect(() => {
     setPage({ text: '資訊對比分析', path: '/' });
   }, []);
 
-  useCandidates();
+  useEffect(() => {
+    if (legislators.length > 0 && !initialLegislatorsSet.current) {
+      setSelectedLegislators([legislators[0], legislators[1]]);
+      initialLegislators.current = legislators;
+      initialLegislatorsSet.current = true;
+    }
+  }, [legislators]);
 
-  return (
+  useLegislatorsApi();
+
+  return selectedLegislators[0].姓名 === '' ? (
+    <ReactLoading type='spinningBubbles' color='#676b6b' />
+  ) : (
     <>
-      <CandidateSelector
-        selectedCandidates={selectedCandidates}
-        setSelectedCandidates={setSelectedCandidates}
+      <LegislatorSelector
+        selectedLegislators={selectedLegislators}
+        setSelectedLegislators={setSelectedLegislators}
       />
       <CategorySelector
-        options={twoCandidatesOptions}
+        options={options}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
       <BarChart
-        candidates={selectedCandidates}
+        legislators={selectedLegislators}
         category={selectedCategory}
         labelFormat={selectedCategory.labelFormat}
       />

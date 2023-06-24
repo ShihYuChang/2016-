@@ -3,7 +3,7 @@ import { ScaleBand, ScaleLinear, ScaleOrdinal, Selection } from 'd3';
 import { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import '../../App.css';
-import { Candidate, Context } from '../../context/context';
+import { Context, Legislator } from '../../context/context';
 
 export interface Category {
   name: string;
@@ -11,7 +11,7 @@ export interface Category {
 }
 
 interface BarChartProps {
-  candidates: Candidate[];
+  legislators: Legislator[];
   category: Category;
   labelFormat: 'currency' | 'percentage' | 'number';
 }
@@ -31,7 +31,7 @@ function createLabels(
   chart: Selection<SVGGElement, unknown, null, undefined>,
   x: ScaleBand<string>,
   y: ScaleLinear<number, number>,
-  data: Candidate[],
+  data: Legislator[],
   selectedCategory: Category
 ) {
   chart
@@ -67,12 +67,12 @@ function createBars(
   y: ScaleLinear<number, number>,
   color: ScaleOrdinal<string, unknown, never>,
   height: number,
-  candidates: Candidate[],
+  legislators: Legislator[],
   category: Category
 ) {
   chart
     .selectAll('.bar')
-    .data(candidates)
+    .data(legislators)
     .enter()
     .append('rect')
     .attr('class', 'bar')
@@ -88,12 +88,12 @@ function createBars(
     .attr('fill', (d) => color(d.姓名) as string)
     .end()
     .then(() => {
-      createLabels(chart, x, y, candidates, category);
+      createLabels(chart, x, y, legislators, category);
     });
 }
 
-export default function BarChart({ candidates, category }: BarChartProps) {
-  const { initialCandidates } = useContext(Context);
+export default function BarChart({ legislators, category }: BarChartProps) {
+  const { initialLegislators } = useContext(Context);
   const chartRef = useRef<SVGSVGElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -105,7 +105,7 @@ export default function BarChart({ candidates, category }: BarChartProps) {
     const x = d3.scaleBand().range([0, width]).padding(0.1);
     const y = d3.scaleLinear().range([height, 0]);
 
-    if (chartRef.current && candidates.length > 0) {
+    if (chartRef.current && legislators.length > 0) {
       const svg = d3
         .select(chartRef.current)
         .attr('width', width + margin.left + margin.right)
@@ -135,10 +135,10 @@ export default function BarChart({ candidates, category }: BarChartProps) {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
-      x.domain(candidates.map((d) => d.姓名 as string));
+      x.domain(legislators.map((d) => d.姓名 as string));
       y.domain([
         0,
-        d3.max(initialCandidates.current, (d) => d[category.name] as number) ||
+        d3.max(initialLegislators.current, (d) => d[category.name] as number) ||
           0,
       ]);
 
@@ -151,12 +151,12 @@ export default function BarChart({ candidates, category }: BarChartProps) {
 
       const color = d3
         .scaleOrdinal()
-        .domain(candidates.map((d) => d.姓名 as string))
+        .domain(legislators.map((d) => d.姓名 as string))
         .range(d3.schemeCategory10);
 
-      createBars(chart, x, y, color, height, candidates, category);
+      createBars(chart, x, y, color, height, legislators, category);
     }
-  }, [candidates, category.name]);
+  }, [legislators, category.name]);
 
   return (
     <Wrapper ref={wrapperRef}>

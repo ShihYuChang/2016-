@@ -1,6 +1,6 @@
-import { Candidate } from '@/context/context';
+import { Legislator } from '@/context/context';
 
-export function parseStrNumber(obj: Candidate) {
+export function parseStrNumber(obj: Legislator) {
   return Object.entries(obj).reduce((acc, [key, value]) => {
     if (typeof value === 'string' && value.endsWith('%')) {
       acc[key] = parseFloat(value.replace('%', ''));
@@ -10,5 +10,5 @@ export function parseStrNumber(obj: Candidate) {
       acc[key] = value;
     }
     return acc;
-  }, {} as Candidate);
+  }, {} as Legislator);
 }

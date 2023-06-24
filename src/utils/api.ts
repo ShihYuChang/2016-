@@ -1,10 +1,10 @@
-import { Candidate } from '@/context/context';
+import { Legislator } from '@/context/context';
 
-interface CandidateApiData {
-  data: Candidate[];
+interface LegislatorApiData {
+  data: Legislator[];
 }
 
-export async function fetchData(url: string): Promise<CandidateApiData> {
+export async function fetchData(url: string): Promise<LegislatorApiData> {
   const res = await fetch(url);
   const json = await res.json();
   return json;

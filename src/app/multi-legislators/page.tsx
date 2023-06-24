@@ -1,10 +1,10 @@
 'use client';
-import useCandidates from '@/hooks/useCandidates';
+import useLegislatorsApi from '@/hooks/useLegislatorsApi';
 import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import BarChart, { Category } from '../../components/Charts/BarChart';
 import CategorySelector from '../../components/Selectors/CategorySelector';
-import { Candidate, Context } from '../../context/context';
+import { Context, Legislator } from '../../context/context';
 
 const PromptMessage = styled.div`
   width: 100%;
@@ -21,30 +21,30 @@ const options: Category[] = [
   { name: '其他收入比例', labelFormat: 'percentage' },
 ];
 
-export default function MultiCandidates() {
-  const { candidates, setPage } = useContext(Context);
-  const [fiveCandidates, setFiveCandidates] = useState<Candidate[]>([]);
+export default function MultiLegislators() {
+  const { legislators, setPage } = useContext(Context);
+  const [fiveLegislators, setFiveLegislators] = useState<Legislator[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     options[0]
   );
 
   useEffect(() => {
-    setPage({ text: '資金來源分析', path: '/multi-candidates' });
+    setPage({ text: '資金來源分析', path: '/multi-legislators' });
   }, []);
 
-  useCandidates();
+  useLegislatorsApi();
 
   useEffect(() => {
-    if (candidates.length > 0) {
-      const clonedCandidates = [...candidates];
-      const sortedCandidates = clonedCandidates.sort(
+    if (legislators.length > 0) {
+      const clonedLegislators = [...legislators];
+      const sortedLegislators = clonedLegislators.sort(
         (a, b) =>
           Number(b[selectedCategory.name]) - Number(a[selectedCategory.name])
       );
-      const output = sortedCandidates.slice(0, 10);
-      setFiveCandidates(output);
+      const output = sortedLegislators.slice(0, 10);
+      setFiveLegislators(output);
     }
-  }, [candidates, selectedCategory]);
+  }, [legislators, selectedCategory]);
   return (
     <>
       <CategorySelector
@@ -54,7 +54,7 @@ export default function MultiCandidates() {
       />
       <PromptMessage>僅列出前十名</PromptMessage>
       <BarChart
-        candidates={fiveCandidates}
+        legislators={fiveLegislators}
         category={selectedCategory}
         labelFormat={selectedCategory.labelFormat}
       />

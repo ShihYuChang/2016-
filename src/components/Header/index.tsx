@@ -5,7 +5,7 @@ import { Context, Page } from '../../context/context';
 
 const options: Page[] = [
   { text: '資訊對比分析', path: '/' },
-  { text: '資金來源分析', path: '/multi-candidates' },
+  { text: '資金來源分析', path: '/multi-legislators' },
 ];
 
 interface OptionProps {
