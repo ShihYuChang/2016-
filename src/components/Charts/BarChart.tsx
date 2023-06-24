@@ -40,9 +40,9 @@ function createLabels(
     .enter()
     .append('text')
     .attr('class', 'label')
-    .attr('x', (d) => (x(d.姓名) ?? 0) + x.bandwidth() / 2)
-    .attr('y', (d) => y(d[selectedCategory.name] as number))
     .attr('text-anchor', 'middle')
+    .attr('x', (d) => (x(d.姓名) ?? 0) + x.bandwidth() / 2)
+    .attr('y', (d) => y(d[selectedCategory.name] as number) - 5)
     .text((d) => {
       switch (selectedCategory.labelFormat) {
         case 'currency':
@@ -57,8 +57,7 @@ function createLabels(
           return d[selectedCategory.name].toLocaleString();
       }
     })
-    .attr('fill', '#676B6B')
-    .attr('y', (d) => y(d[selectedCategory.name] as number) - 5);
+    .attr('fill', '#676B6B');
 }
 
 function createBars(
@@ -98,7 +97,7 @@ export default function BarChart({ legislators, category }: BarChartProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const margin = { top: 30, right: 70, bottom: 30, left: 90 };
+    const margin = { top: 30, right: 70, bottom: 90, left: 90 };
     let width = 500 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
 
@@ -145,7 +144,12 @@ export default function BarChart({ legislators, category }: BarChartProps) {
       chart
         .append('g')
         .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x))
+        .selectAll('text')
+        .style('text-anchor', 'end')
+        .attr('dx', '-.8em')
+        .attr('dy', '.15em')
+        .attr('transform', 'rotate(-45)');
 
       chart.append('g').call(d3.axisLeft(y));
 
