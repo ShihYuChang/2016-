@@ -67,18 +67,18 @@ function createTooltip() {
     .select('body')
     .append('div')
     .attr('class', 'tooltipWrapper')
-    .style('opacity', 0)
+    .style('display', 'none')
     .on('mouseover', () => {
       if (currentBar) {
         d3.select(currentBar).style('opacity', 0.5);
       }
-      tooltip.interrupt().style('opacity', 1);
+      tooltip.interrupt().style('display', 'flex');
     })
     .on('mouseout', () => {
       if (currentBar) {
         d3.select(currentBar).style('opacity', 1);
       }
-      tooltip.style('opacity', 0);
+      tooltip.style('display', 'none');
     });
 
   return tooltip;
@@ -120,7 +120,7 @@ function createBars(
     .on('mouseover', (event, d) => {
       currentBar = event.currentTarget;
       d3.select(currentBar).style('opacity', 0.5);
-      tooltip.interrupt().style('opacity', 1);
+      tooltip.interrupt().style('display', 'flex');
       tooltip
         .html(createTooltipContent(d))
         .style('position', 'absolute')
@@ -130,7 +130,7 @@ function createBars(
     .on('mouseout', (event) => {
       currentBar = event.currentTarget;
       d3.select(currentBar).style('opacity', 1);
-      tooltip.style('opacity', 0);
+      tooltip.style('display', 'none');
     })
     .transition()
     .duration(800)
