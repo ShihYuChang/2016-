@@ -7,3 +7,12 @@
   opacity: 0.5;
   cursor: pointer;
 }
+
+.tooltip {
+  display: flex;
+  line-height: 20px;
+  padding: 10px;
+  background-color: antiquewhite;
+  color: #676b6b;
+  font-size: 14px;
+}

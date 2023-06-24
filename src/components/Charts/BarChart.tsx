@@ -60,6 +60,22 @@ function createLabels(
     .attr('fill', '#676B6B');
 }
 
+function createTooltip() {
+  const tooltip = d3
+    .select('body')
+    .append('div')
+    .attr('class', 'tooltip')
+    .style('opacity', 0)
+    .on('mouseover', () => {
+      tooltip.interrupt().style('opacity', 1);
+    })
+    .on('mouseout', function () {
+      tooltip.style('opacity', 0);
+    });
+
+  return tooltip;
+}
+
 function createBars(
   chart: Selection<SVGGElement, unknown, null, undefined>,
   x: ScaleBand<string>,
@@ -69,6 +85,8 @@ function createBars(
   legislators: Legislator[],
   category: Category
 ) {
+  const tooltip = createTooltip();
+
   chart
     .selectAll('.bar')
     .data(legislators)
@@ -80,6 +98,17 @@ function createBars(
     .attr('transform', `translate(${x.bandwidth() / 4})`)
     .attr('y', height)
     .attr('height', 0)
+    .on('mouseover', function (event, d) {
+      tooltip.interrupt().style('opacity', 1);
+      tooltip
+        .html(`Name: ${d.姓名}<br/>Value: ${d[category.name]}`)
+        .style('position', 'absolute')
+        .style('left', `${event.clientX - 50}px`)
+        .style('top', `${event.clientY}px`);
+    })
+    .on('mouseout', function () {
+      tooltip.style('opacity', 0);
+    })
     .transition()
     .duration(800)
     .attr('y', (d) => y(d[category.name] as number))
