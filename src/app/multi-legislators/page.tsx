@@ -1,5 +1,6 @@
 'use client';
 import useLegislatorsApi from '@/hooks/useLegislatorsApi';
+import usePageInfo from '@/hooks/usePageInfo';
 import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import BarChart, { Category } from '../../components/Charts/BarChart';
@@ -22,16 +23,13 @@ const options: Category[] = [
 ];
 
 export default function MultiLegislators() {
-  const { legislators, setPage } = useContext(Context);
+  const { legislators } = useContext(Context);
   const [fiveLegislators, setFiveLegislators] = useState<Legislator[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     options[0]
   );
 
-  useEffect(() => {
-    setPage({ text: '資金來源分析', path: '/multi-legislators' });
-  }, []);
-
+  usePageInfo({ text: '資金來源分析', path: '/multi-legislators' });
   useLegislatorsApi();
 
   useEffect(() => {

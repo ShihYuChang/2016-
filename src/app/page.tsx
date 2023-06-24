@@ -4,6 +4,7 @@ import CategorySelector from '@/components/Selectors/CategorySelector';
 import LegislatorSelector from '@/components/Selectors/LegislatorSelector';
 import { Context, Legislator } from '@/context/context';
 import useLegislatorsApi from '@/hooks/useLegislatorsApi';
+import usePageInfo from '@/hooks/usePageInfo';
 import { useContext, useEffect, useRef, useState } from 'react';
 import ReactLoading from 'react-loading';
 
@@ -15,7 +16,7 @@ const options: Category[] = [
 ];
 
 export default function Home() {
-  const { setPage, legislators, initialLegislators } = useContext(Context);
+  const { legislators, initialLegislators } = useContext(Context);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     options[0]
   );
@@ -25,9 +26,8 @@ export default function Home() {
   ]);
   const initialLegislatorsSet = useRef<boolean>(false);
 
-  useEffect(() => {
-    setPage({ text: '資訊對比分析', path: '/' });
-  }, []);
+  useLegislatorsApi();
+  usePageInfo({ text: '資訊對比分析', path: '/' });
 
   useEffect(() => {
     if (legislators.length > 0 && !initialLegislatorsSet.current) {
@@ -36,8 +36,6 @@ export default function Home() {
       initialLegislatorsSet.current = true;
     }
   }, [legislators]);
-
-  useLegislatorsApi();
 
   return selectedLegislators[0].姓名 === '' ? (
     <ReactLoading type='spinningBubbles' color='#676b6b' />
