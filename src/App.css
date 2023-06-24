@@ -4,15 +4,32 @@
 }
 
 .bar:hover {
-  opacity: 0.5;
+  /* opacity: 0.5; */
   cursor: pointer;
+}
+
+.tooltipWrapper {
+  height: 300px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #464646;
+  color: #676b6b;
+  padding: 10px 20px;
+  font-size: 12px;
 }
 
 .tooltip {
   display: flex;
-  line-height: 20px;
-  padding: 10px;
-  background-color: antiquewhite;
-  color: #676b6b;
-  font-size: 14px;
+  gap: 5px;
+  color: white;
+}
+
+.tooltipTitle {
+  font-weight: 100;
+}
+
+.tooltipText {
+  font-weight: 700;
 }

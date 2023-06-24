@@ -27,6 +27,8 @@ const Chart = styled.svg`
   width: 100%;
 `;
 
+let currentBar: SVGRectElement | null;
+
 function createLabels(
   chart: Selection<SVGGElement, unknown, null, undefined>,
   x: ScaleBand<string>,
@@ -64,16 +66,33 @@ function createTooltip() {
   const tooltip = d3
     .select('body')
     .append('div')
-    .attr('class', 'tooltip')
+    .attr('class', 'tooltipWrapper')
     .style('opacity', 0)
     .on('mouseover', () => {
+      if (currentBar) {
+        d3.select(currentBar).style('opacity', 0.5);
+      }
       tooltip.interrupt().style('opacity', 1);
     })
-    .on('mouseout', function () {
+    .on('mouseout', () => {
+      if (currentBar) {
+        d3.select(currentBar).style('opacity', 1);
+      }
       tooltip.style('opacity', 0);
     });
 
   return tooltip;
+}
+
+function createTooltipContent(legislator: Legislator) {
+  let tooltipContent = '';
+  for (const key in legislator) {
+    const value = isNaN(Number(legislator[key]))
+      ? legislator[key]
+      : legislator[key].toLocaleString();
+    tooltipContent += `<div class='tooltip'><div class='tooltipTitle'>${key}: </div><div class='tooltipText'>${value}</div></div>`;
+  }
+  return tooltipContent;
 }
 
 function createBars(
@@ -98,15 +117,19 @@ function createBars(
     .attr('transform', `translate(${x.bandwidth() / 4})`)
     .attr('y', height)
     .attr('height', 0)
-    .on('mouseover', function (event, d) {
+    .on('mouseover', (event, d) => {
+      currentBar = event.currentTarget;
+      d3.select(currentBar).style('opacity', 0.5);
       tooltip.interrupt().style('opacity', 1);
       tooltip
-        .html(`Name: ${d.姓名}<br/>Value: ${d[category.name]}`)
+        .html(createTooltipContent(d))
         .style('position', 'absolute')
         .style('left', `${event.clientX - 50}px`)
         .style('top', `${event.clientY}px`);
     })
-    .on('mouseout', function () {
+    .on('mouseout', (event) => {
+      currentBar = event.currentTarget;
+      d3.select(currentBar).style('opacity', 1);
       tooltip.style('opacity', 0);
     })
     .transition()
