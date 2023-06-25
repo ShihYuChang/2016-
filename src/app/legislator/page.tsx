@@ -1,15 +1,27 @@
 'use client';
 import LegislatorSelector from '@/components/Selectors/LegislatorSelector';
 import { Legislator } from '@/context/context';
-import { useState } from 'react';
+import useLegislatorsApi from '@/hooks/useLegislatorsApi';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function LegislatorHome() {
-  const [legislators, setLegislators] = useState<Legislator[]>([{ 姓名: '' }]);
+  const router = useRouter();
+  const [legislator, setLegislator] = useState<Legislator[]>([{ 姓名: '' }]);
+
+  useEffect(() => {
+    if (legislator[0].姓名 !== '') {
+      router.push(`/legislator/${legislator}`);
+    }
+  }, [router, legislator]);
+
+  useLegislatorsApi();
+
   return (
     <>
       <LegislatorSelector
-        selectedLegislators={legislators}
-        setSelectedLegislators={setLegislators}
+        selectedLegislators={legislator}
+        setSelectedLegislators={setLegislator}
       />
     </>
   );
