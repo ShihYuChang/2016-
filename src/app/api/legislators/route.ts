@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import rawData from './raw_data.json';
+import { getLegislators } from '../utils/firebase';
 
 export async function GET() {
-  const { data } = rawData;
+  const data = await getLegislators();
   return NextResponse.json(data);
 }
