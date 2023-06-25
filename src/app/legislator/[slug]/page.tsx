@@ -3,8 +3,8 @@ import LegislatorSelector from '@/components/Selectors/LegislatorSelector';
 import { LegislatorContext } from '@/context/legislatorContext';
 import useLegislatorSelect from '@/hooks/useLegislatorSelect';
 import useLegislatorsApi from '@/hooks/useLegislatorsApi';
-import { fetchData } from '@/utils/api';
-import { useContext, useEffect } from 'react';
+import { DonationData, fetchDonations } from '@/utils/api';
+import { useContext, useEffect, useState } from 'react';
 
 export default function LegislatorPage({
   params,
@@ -18,6 +18,7 @@ export default function LegislatorPage({
     /(%[0-9A-F]{2})+/gi,
     decodeURIComponent
   );
+  const [donations, setDonations] = useState<DonationData[]>([]);
 
   useEffect(() => {
     setSelectedLegislator([{ 姓名: decodedSlug }]);
@@ -25,12 +26,12 @@ export default function LegislatorPage({
 
   useEffect(() => {
     async function getDonationData() {
-      const data = await fetchData('/api/donations', {
+      const data = await fetchDonations('/api/donations', {
         headers: {
           legislator: encodeURIComponent(selectedLegislator[0].姓名),
         },
       });
-      console.log(data);
+      setDonations(data);
     }
 
     getDonationData();
@@ -46,6 +47,11 @@ export default function LegislatorPage({
         selectedLegislators={selectedLegislator}
         setSelectedLegislators={setSelectedLegislator}
       />
+      <div>
+        {donations.map((donation, index) => (
+          <div key={index}>{donation['捐贈者／支出對象']}</div>
+        ))}
+      </div>
     </>
   );
 }
