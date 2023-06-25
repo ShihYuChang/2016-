@@ -15,11 +15,23 @@ interface TextProps {
 const Wrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
+  height: 500px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   overflow: auto;
   gap: 10px;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #676b6b;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #a4a4a3;
+  }
 `;
 
 const Header = styled.div``;
