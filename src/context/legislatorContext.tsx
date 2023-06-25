@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-empty-function */
 import { ReactNode, createContext, useState } from 'react';
 import { Legislator } from './context';
 
