@@ -1,3 +1,4 @@
+import { Legislator } from '@/context/context';
 import { initializeApp } from 'firebase/app';
 import {
   collection,
@@ -20,9 +21,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export async function getLegislators() {
-  const data = [];
+  const data: Legislator[] = [];
   const q = query(collection(db, 'legislators'), orderBy('總收入', 'desc'));
   const snapshot = await getDocs(q);
-  snapshot.forEach((doc) => data.push(doc.data()));
+  snapshot.forEach((doc) => data.push(doc.data() as Legislator));
   return data;
 }
