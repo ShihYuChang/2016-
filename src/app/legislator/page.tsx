@@ -1,23 +1,13 @@
 'use client';
-import LegislatorSelector from '@/components/Selectors/LegislatorSelector';
-import { LegislatorContext } from '@/context/legislatorContext';
-import useLegislatorSelect from '@/hooks/useLegislatorSelect';
-import useLegislatorsApi from '@/hooks/useLegislatorsApi';
-import { useContext } from 'react';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default function LegislatorHome() {
-  const { selectedLegislator, setSelectedLegislator } =
-    useContext(LegislatorContext);
-
-  useLegislatorSelect();
-  useLegislatorsApi();
-
-  return (
-    <>
-      <LegislatorSelector
-        selectedLegislators={selectedLegislator}
-        setSelectedLegislators={setSelectedLegislator}
-      />
-    </>
-  );
+  return <Wrapper>尚未選擇政治人物</Wrapper>;
 }

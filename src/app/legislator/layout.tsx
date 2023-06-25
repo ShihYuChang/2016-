@@ -1,6 +1,8 @@
 'use client';
 import LegislatorSelector from '@/components/Selectors/LegislatorSelector';
 import { LegislatorContext } from '@/context/legislatorContext';
+import useLegislatorSelect from '@/hooks/useLegislatorSelect';
+import useLegislatorsApi from '@/hooks/useLegislatorsApi';
 import { useContext } from 'react';
 
 export default function LegislatorLayout({
@@ -10,6 +12,8 @@ export default function LegislatorLayout({
 }) {
   const { selectedLegislator, setSelectedLegislator } =
     useContext(LegislatorContext);
+  useLegislatorsApi();
+  useLegislatorSelect();
   return (
     <>
       <LegislatorSelector
