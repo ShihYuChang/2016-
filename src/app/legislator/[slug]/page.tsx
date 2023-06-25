@@ -1,5 +1,4 @@
 'use client';
-import LegislatorSelector from '@/components/Selectors/LegislatorSelector';
 import { LegislatorContext } from '@/context/legislatorContext';
 import useLegislatorSelect from '@/hooks/useLegislatorSelect';
 import useLegislatorsApi from '@/hooks/useLegislatorsApi';
@@ -43,10 +42,7 @@ export default function LegislatorPage({
   return (
     <>
       <div>Legislator: {decodedSlug}</div>
-      <LegislatorSelector
-        selectedLegislators={selectedLegislator}
-        setSelectedLegislators={setSelectedLegislator}
-      />
+
       <div>
         {donations.map((donation, index) => (
           <div key={index}>{donation['捐贈者／支出對象']}</div>
