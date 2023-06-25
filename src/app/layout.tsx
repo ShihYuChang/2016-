@@ -2,6 +2,7 @@
 import Header from '@/components/Header';
 import PageTitle from '@/components/Title/PageTitle';
 import ContextProvider from '@/context/context';
+import LegislatorContextProvider from '@/context/legislatorContext';
 import StyledComponentsRegistry from '@/lib/registry';
 import styled from 'styled-components';
 import './globals.css';
@@ -25,11 +26,13 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <ContextProvider>
-            <Header />
-            <Content>
-              <PageTitle />
-              {children}
-            </Content>
+            <LegislatorContextProvider>
+              <Header />
+              <Content>
+                <PageTitle />
+                {children}
+              </Content>
+            </LegislatorContextProvider>
           </ContextProvider>
         </StyledComponentsRegistry>
       </body>

@@ -1,27 +1,25 @@
 'use client';
 import LegislatorSelector from '@/components/Selectors/LegislatorSelector';
-import { Legislator } from '@/context/context';
+import { LegislatorContext } from '@/context/legislatorContext';
+import useLegislatorSelect from '@/hooks/useLegislatorSelect';
 import useLegislatorsApi from '@/hooks/useLegislatorsApi';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 
+const selectBarPrompt = '--- 請選擇政治人物 ---';
 export default function LegislatorHome() {
   const router = useRouter();
-  const [legislator, setLegislator] = useState<Legislator[]>([{ 姓名: '' }]);
+  const { selectedLegislator, setSelectedLegislator } =
+    useContext(LegislatorContext);
 
-  useEffect(() => {
-    if (legislator[0].姓名 !== '') {
-      router.push(`/legislator/${legislator}`);
-    }
-  }, [router, legislator]);
-
+  useLegislatorSelect();
   useLegislatorsApi();
 
   return (
     <>
       <LegislatorSelector
-        selectedLegislators={legislator}
-        setSelectedLegislators={setLegislator}
+        selectedLegislators={selectedLegislator}
+        setSelectedLegislators={setSelectedLegislator}
       />
     </>
   );
