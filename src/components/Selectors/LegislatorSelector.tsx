@@ -209,7 +209,11 @@ export default function LegislatorSelector({
               legislators.map((legislator, index) => (
                 <Option
                   key={index}
-                  disabled={selectedLegislators.indexOf(legislator) !== -1}
+                  disabled={
+                    selectedLegislators.findIndex(
+                      (obj) => obj.姓名 === legislator.姓名
+                    ) !== -1
+                  }
                   onClick={() =>
                     handleLegislatorSelect(legislator.姓名, parentIndex)
                   }
