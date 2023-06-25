@@ -22,14 +22,14 @@ const options: Category[] = [
   { name: '其他收入比例', labelFormat: 'percentage' },
 ];
 
-export default function MultiLegislators() {
+export default function SourceAnalysis() {
   const { legislators } = useContext(Context);
   const [fiveLegislators, setFiveLegislators] = useState<Legislator[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     options[0]
   );
 
-  usePageInfo({ text: '資金來源分析', path: '/multi-legislators' });
+  usePageInfo({ text: '資金來源分析', path: '/source-analysis' });
   useLegislatorsApi();
 
   useEffect(() => {

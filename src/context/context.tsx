@@ -4,7 +4,7 @@ import { ReactNode, createContext, useRef, useState } from 'react';
 
 export interface Page {
   text: '資訊對比分析' | '資金來源分析';
-  path: '/' | '/multi-legislators';
+  path: '/' | '/source-analysis';
 }
 
 interface ContextProviderProps {
