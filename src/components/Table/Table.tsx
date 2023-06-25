@@ -5,6 +5,7 @@ interface TableProps {
   data: DonationData[];
   excludedCategories: string[];
   oneCharCartegories: string[];
+  localeStrCategories: string[];
 }
 
 interface TextProps {
@@ -21,6 +22,8 @@ const Wrapper = styled.div`
   gap: 10px;
 `;
 
+const Header = styled.div``;
+
 const Row = styled.div`
   width: 100%;
   display: flex;
@@ -30,49 +33,41 @@ const Row = styled.div`
 `;
 
 const Title = styled.div<TextProps>`
-  width: ${({ $oneChar: $serialNum }) => ($serialNum ? '20px' : '150px')};
-  flex-shrink: 0;
-  text-align: ${({ $oneChar: $serialNum }) =>
-    $serialNum ? 'center' : 'start'};
+  width: ${({ $oneChar }) => ($oneChar ? '50px' : '150px')};
 `;
 
 const Text = styled.div<TextProps>`
-  box-sizing: border-box;
-  width: ${({ $oneChar: $serialNum }) => ($serialNum ? '20px' : '150px')};
-  height: ${({ $oneChar: $serialNum }) => $serialNum && '20px'};
-  background-color: ${({ $oneChar: $serialNum }) => $serialNum && '#67676b'};
-  color: ${({ $oneChar: $serialNum }) => $serialNum && 'white'};
-  border-radius: ${({ $oneChar: $serialNum }) => $serialNum && '50%'};
-  flex-shrink: 0;
+  width: ${({ $oneChar }) => ($oneChar ? '50px' : '150px')};
   display: flex;
   align-items: center;
-  justify-content: ${({ $oneChar: $serialNum }) => $serialNum && 'center'};
-  font-size: ${({ $oneChar: $serialNum }) => $serialNum && '12px'};
-  letter-spacing: ${({ $oneChar: $serialNum }) => $serialNum && '0'};
+  font-size: 14px;
 `;
 
 const SplitLine = styled.hr`
-  width: 100vw;
+  margin-top: 5px;
 `;
 
 export default function Table({
   data,
   excludedCategories,
   oneCharCartegories,
+  localeStrCategories,
 }: TableProps) {
   const titles = Object.keys(data[0]).filter(
     (title) => !excludedCategories.includes(title)
   );
   return (
     <Wrapper>
-      <Row>
-        {titles.map((title, index) => (
-          <Title key={index} $oneChar={oneCharCartegories.includes(title)}>
-            {title === '序號' ? '#' : title}
-          </Title>
-        ))}
-      </Row>
-      <SplitLine />
+      <Header>
+        <Row>
+          {titles.map((title, index) => (
+            <Title key={index} $oneChar={oneCharCartegories.includes(title)}>
+              {title === '序號' ? '#' : title}
+            </Title>
+          ))}
+        </Row>
+        <SplitLine />
+      </Header>
       {data.map((donation, index) => (
         <Row key={index}>
           {titles.map((title, index) => (
@@ -80,7 +75,9 @@ export default function Table({
               key={`${title}${index}`}
               $oneChar={oneCharCartegories.includes(title)}
             >
-              {donation[title]}
+              {localeStrCategories.includes(title)
+                ? donation[title].toLocaleString()
+                : donation[title]}
             </Text>
           ))}
         </Row>

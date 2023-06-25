@@ -8,7 +8,8 @@ import { DonationData, fetchDonations } from '@/utils/api';
 import { useContext, useEffect, useState } from 'react';
 
 const excludedCategories = ['候選人', '推薦政黨', '當選註記', 'P', '支出金額'];
-const oneCharCartegories = ['序號'];
+const oneCharCartegories = ['序號', '金錢類'];
+const localeStrCategories = ['收入金額'];
 export default function LegislatorPage({
   params,
 }: {
@@ -51,6 +52,7 @@ export default function LegislatorPage({
           data={donations}
           excludedCategories={excludedCategories}
           oneCharCartegories={oneCharCartegories}
+          localeStrCategories={localeStrCategories}
         />
       )}
     </>
