@@ -7,6 +7,8 @@ import usePageInfo from '@/hooks/usePageInfo';
 import { DonationData, fetchDonations } from '@/utils/api';
 import { useContext, useEffect, useState } from 'react';
 
+const excludedCategories = ['候選人', '推薦政黨', '當選註記', 'P', '支出金額'];
+const oneCharCartegories = ['序號'];
 export default function LegislatorPage({
   params,
 }: {
@@ -42,5 +44,15 @@ export default function LegislatorPage({
   useLegislatorsApi();
   usePageInfo({ text: '政治獻金明細', path: '/legislator' });
 
-  return <>{donations.length > 0 && <Table donations={donations} />}</>;
+  return (
+    <>
+      {donations.length > 0 && (
+        <Table
+          data={donations}
+          excludedCategories={excludedCategories}
+          oneCharCartegories={oneCharCartegories}
+        />
+      )}
+    </>
+  );
 }

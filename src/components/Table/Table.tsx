@@ -2,11 +2,13 @@ import { DonationData } from '@/utils/api';
 import styled from 'styled-components';
 
 interface TableProps {
-  donations: DonationData[];
+  data: DonationData[];
+  excludedCategories: string[];
+  oneCharCartegories: string[];
 }
 
 interface TextProps {
-  $serialNum: boolean;
+  $oneChar: boolean;
 }
 
 const Wrapper = styled.div`
@@ -28,46 +30,56 @@ const Row = styled.div`
 `;
 
 const Title = styled.div<TextProps>`
-  width: ${({ $serialNum }) => ($serialNum ? '20px' : '150px')};
+  width: ${({ $oneChar: $serialNum }) => ($serialNum ? '20px' : '150px')};
   flex-shrink: 0;
-  text-align: ${({ $serialNum }) => ($serialNum ? 'center' : 'start')};
+  text-align: ${({ $oneChar: $serialNum }) =>
+    $serialNum ? 'center' : 'start'};
 `;
 
 const Text = styled.div<TextProps>`
   box-sizing: border-box;
-  width: ${({ $serialNum }) => ($serialNum ? '20px' : '150px')};
-  height: ${({ $serialNum }) => $serialNum && '20px'};
-  background-color: ${({ $serialNum }) => $serialNum && '#67676b'};
-  color: ${({ $serialNum }) => $serialNum && 'white'};
-  border-radius: ${({ $serialNum }) => $serialNum && '50%'};
+  width: ${({ $oneChar: $serialNum }) => ($serialNum ? '20px' : '150px')};
+  height: ${({ $oneChar: $serialNum }) => $serialNum && '20px'};
+  background-color: ${({ $oneChar: $serialNum }) => $serialNum && '#67676b'};
+  color: ${({ $oneChar: $serialNum }) => $serialNum && 'white'};
+  border-radius: ${({ $oneChar: $serialNum }) => $serialNum && '50%'};
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  justify-content: ${({ $serialNum }) => $serialNum && 'center'};
-  font-size: ${({ $serialNum }) => $serialNum && '12px'};
-  letter-spacing: ${({ $serialNum }) => $serialNum && '0'};
+  justify-content: ${({ $oneChar: $serialNum }) => $serialNum && 'center'};
+  font-size: ${({ $oneChar: $serialNum }) => $serialNum && '12px'};
+  letter-spacing: ${({ $oneChar: $serialNum }) => $serialNum && '0'};
 `;
 
-const excludedCategories = ['候選人', '推薦政黨', '當選註記', 'P', '支出金額'];
+const SplitLine = styled.hr`
+  width: 100vw;
+`;
 
-export default function Table({ donations }: TableProps) {
-  const titles = Object.keys(donations[0]).filter(
+export default function Table({
+  data,
+  excludedCategories,
+  oneCharCartegories,
+}: TableProps) {
+  const titles = Object.keys(data[0]).filter(
     (title) => !excludedCategories.includes(title)
   );
   return (
     <Wrapper>
       <Row>
         {titles.map((title, index) => (
-          <Title key={index} $serialNum={title === '序號'}>
+          <Title key={index} $oneChar={oneCharCartegories.includes(title)}>
             {title === '序號' ? '#' : title}
           </Title>
         ))}
       </Row>
-      <hr />
-      {donations.map((donation, index) => (
+      <SplitLine />
+      {data.map((donation, index) => (
         <Row key={index}>
           {titles.map((title, index) => (
-            <Text key={`${title}${index}`} $serialNum={title === '序號'}>
+            <Text
+              key={`${title}${index}`}
+              $oneChar={oneCharCartegories.includes(title)}
+            >
               {donation[title]}
             </Text>
           ))}
