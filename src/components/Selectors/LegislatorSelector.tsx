@@ -181,7 +181,9 @@ export default function LegislatorSelector({
     <Wrapper>
       {selectedLegislators.map((legislator, parentIndex) => (
         <SelectorWrapper key={parentIndex}>
-          <SelectorLabel>政治人物 {parentIndex + 1}</SelectorLabel>
+          <SelectorLabel>
+            政治人物 {selectedLegislators.length > 1 && parentIndex + 1}
+          </SelectorLabel>
           <Selector
             onClick={() => handleSelectorClick(parentIndex)}
             $clicked={parentIndex === clickedSelector}

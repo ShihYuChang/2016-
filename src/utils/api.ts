@@ -1,7 +1,14 @@
 import { Legislator } from '@/context/context';
 
-export async function fetchData(url: string): Promise<Legislator[]> {
-  const res = await fetch(url);
+interface RequestHeaders {
+  headers: { [key: string]: string };
+}
+
+export async function fetchData(
+  url: string,
+  headers?: RequestHeaders
+): Promise<Legislator[]> {
+  const res = await fetch(url, headers);
   const json = await res.json();
   return json;
 }
