@@ -10,6 +10,5 @@ export default function LegislatorPage({
     /(%[0-9A-F]{2})+/gi,
     decodeURIComponent
   );
-  console.log(decodedSlug);
   return <div>Legislator: {decodedSlug}</div>;
 }
