@@ -1,4 +1,5 @@
 import { Legislator } from '@/context/context';
+import { DonationData } from '@/utils/api';
 import { initializeApp } from 'firebase/app';
 import {
   collection,
@@ -6,6 +7,7 @@ import {
   getFirestore,
   orderBy,
   query,
+  where,
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -26,4 +28,33 @@ export async function getLegislators() {
   const snapshot = await getDocs(q);
   snapshot.forEach((doc) => data.push(doc.data() as Legislator));
   return data;
+}
+
+export async function getDonations(selectedLegislator: string | null) {
+  const data: DonationData[] = [];
+  const q = query(
+    collection(db, 'donations'),
+    where('候選人', '==', selectedLegislator),
+    orderBy('序號', 'asc')
+  );
+  const snapshot = await getDocs(q);
+  snapshot.forEach((doc) => data.push(doc.data() as DonationData));
+  const sortedData = data.map((obj) => {
+    return {
+      序號: obj.序號,
+      '捐贈者／支出對象': obj['捐贈者／支出對象'],
+      交易日期: obj.交易日期,
+      收入金額: obj.收入金額,
+      支出金額: obj.支出金額,
+      收支科目: obj.收支科目,
+      金錢類: obj.金錢類,
+      統一編號: obj.統一編號,
+      地址: obj.地址,
+      當選註記: obj.當選註記,
+      推薦政黨: obj.推薦政黨,
+      候選人: obj.候選人,
+      P: obj.P,
+    };
+  });
+  return sortedData;
 }
