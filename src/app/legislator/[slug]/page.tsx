@@ -1,6 +1,9 @@
 'use client';
 import Table from '@/components/Table/Table';
-import { LegislatorContext } from '@/context/legislatorContext';
+import {
+  LegislatorContext,
+  selectBarPrompt,
+} from '@/context/legislatorContext';
 import usePageInfo from '@/hooks/usePageInfo';
 import { DonationData, fetchDonations } from '@/utils/api';
 import { useContext, useEffect, useState } from 'react';
@@ -36,8 +39,8 @@ export default function LegislatorPage({
       setDonations(data);
     }
 
-    getDonationData();
-  }, [selectedLegislator]);
+    selectedLegislator[0].姓名 !== selectBarPrompt && getDonationData();
+  }, [selectedLegislator[0].姓名]);
 
   usePageInfo({ text: '政治獻金明細', path: '/legislator' });
 
